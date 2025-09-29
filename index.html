@@ -1,14 +1,588 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WDD 130 | Personal Homepage</title>
+    <title>Mapa Mental - Integração Help Desk</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.8em;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .header p {
+            color: #95a5a6;
+            font-size: 1.1em;
+        }
+
+        .mind-map {
+            margin-top: 30px;
+        }
+
+        .node {
+            margin-bottom: 15px;
+        }
+
+        .node-content {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .node-content:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .toggle-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .node-title {
+            font-weight: 600;
+            flex-grow: 1;
+        }
+
+        /* Níveis de profundidade */
+        .level-0 .node-content {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .level-1 {
+            margin-left: 40px;
+            border-left: 3px solid #e0e0e0;
+            padding-left: 20px;
+        }
+
+        .level-1 .node-content {
+            font-size: 1.1em;
+        }
+
+        .level-2 {
+            margin-left: 40px;
+            border-left: 2px solid #f0f0f0;
+            padding-left: 20px;
+        }
+
+        .level-2 .node-content {
+            font-size: 1em;
+        }
+
+        /* Cores por categoria */
+        .color-blue { background-color: #e3f2fd; color: #1565c0; }
+        .color-green { background-color: #e8f5e9; color: #2e7d32; }
+        .color-purple { background-color: #f3e5f5; color: #6a1b9a; }
+        .color-orange { background-color: #fff3e0; color: #e65100; }
+        .color-red { background-color: #ffebee; color: #c62828; }
+        .color-yellow { background-color: #fff9c4; color: #f57f17; }
+        .color-light-blue { background-color: #e1f5fe; color: #01579b; }
+        .color-light-green { background-color: #f1f8e9; color: #558b2f; }
+        .color-light-purple { background-color: #ede7f6; color: #4527a0; }
+        .color-gray { background-color: #f5f5f5; color: #424242; }
+
+        .children {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .children.expanded {
+            max-height: 5000px;
+        }
+
+        .cronograma {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px solid #e0e0e0;
+        }
+
+        .cronograma h3 {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .cronograma-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .cronograma-item {
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .cronograma-item h4 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .cronograma-item p {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .btn-container {
+                display: none;
+            }
+            .children {
+                max-height: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .level-1, .level-2 {
+                margin-left: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to WDD 130.</h1>
-    <p>This page will become your homepage for the course. You will remove this text and replace it with your own personal details.</p>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Mapa Mental</h1>
+            <h2>Integração de Novos Colaboradores</h2>
+            <p>Help Desk I - Suporte Técnico</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">📌 Clique nos itens para expandir/recolher</p>
+        </div>
 
-    <img src="images/salt-lake-temple.jpg" alt="The Salt Lake Temple.">
+        <div class="mind-map" id="mindMap"></div>
+
+        <div class="cronograma">
+            <h3>📅 Cronograma Resumido</h3>
+            <div class="cronograma-grid">
+                <div class="cronograma-item color-blue">
+                    <h4>Dia 1 (08h-10h)</h4>
+                    <p>Orientação inicial</p>
+                </div>
+                <div class="cronograma-item color-green">
+                    <h4>Dia 1 (10h+) até Dia 2 (1º período)</h4>
+                    <p>Integração ao atendimento</p>
+                </div>
+                <div class="cronograma-item color-orange">
+                    <h4>Dia 2 (2º período) em diante</h4>
+                    <p>Início dos atendimentos</p>
+                </div>
+                <div class="cronograma-item color-red">
+                    <h4>Semanal</h4>
+                    <p>Avaliações e feedbacks</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button class="btn" onclick="expandAll()">➕ Expandir Todos</button>
+            <button class="btn" onclick="collapseAll()">➖ Recolher Todos</button>
+            <button class="btn" onclick="window.print()">🖨️ Imprimir</button>
+        </div>
+    </div>
+
+    <script>
+        const mindMapData = [
+            {
+                id: 'orientacao',
+                title: '1. ORIENTAÇÃO INICIAL (Dia 1: 08h-10h)',
+                color: 'color-blue',
+                expanded: true,
+                children: [
+                    {
+                        title: 'Tour pelas Instalações',
+                        color: 'color-light-blue',
+                        expanded: true,
+                        children: [
+                            { title: 'Banheiro, bebedouro, refeitório', color: 'color-gray' },
+                            { title: 'Áreas de descanso', color: 'color-gray' },
+                            { title: 'Pontos de acesso (entradas/saídas)', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Procedimentos Administrativos',
+                        color: 'color-light-blue',
+                        expanded: true,
+                        children: [
+                            { title: 'Registro de ponto', color: 'color-gray' },
+                            { title: 'Ajustes no Sênior', color: 'color-gray' },
+                            { title: 'Escala de jornada e folgas', color: 'color-gray' },
+                            { title: 'Trocas de turno', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Apresentação da Equipe',
+                        color: 'color-light-blue',
+                        expanded: true,
+                        children: [
+                            { title: 'Tour pelo Prédio ADM e HMS', color: 'color-gray' },
+                            { title: 'Setores principais de TI', color: 'color-gray' },
+                            { title: 'Responsáveis por área', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Cultura Organizacional',
+                        color: 'color-light-blue',
+                        expanded: true,
+                        children: [
+                            { title: 'Normas internas (uniforme, crachá)', color: 'color-gray' },
+                            { title: 'Comunicação formal/informal', color: 'color-gray' },
+                            { title: 'Postura ética e colaborativa', color: 'color-gray' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'integracao',
+                title: '2. INTEGRAÇÃO AO SETOR (Dia 1: 10h em diante)',
+                color: 'color-green',
+                expanded: true,
+                children: [
+                    {
+                        title: 'Estação de Trabalho',
+                        color: 'color-light-green',
+                        expanded: true,
+                        children: [
+                            { title: 'Entrega do headset', color: 'color-gray' },
+                            { title: 'Definição do local de trabalho', color: 'color-gray' },
+                            { title: 'Organização dos armários', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Configuração de Sistemas',
+                        color: 'color-light-green',
+                        expanded: true,
+                        children: [
+                            { title: 'Usuário de máquina', color: 'color-gray' },
+                            { title: 'Configuração de ramal', color: 'color-gray' },
+                            { title: 'Validação de acessos', color: 'color-gray' },
+                            { title: 'Pasta de favoritos com links', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Base de Conhecimento',
+                        color: 'color-light-green',
+                        expanded: true,
+                        children: [
+                            { title: 'Apresentação da estrutura', color: 'color-gray' },
+                            { title: 'Manuais de processos', color: 'color-gray' },
+                            { title: 'Instrução KI 0061 (referência base)', color: 'color-gray' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'atendimento',
+                title: '3. INTEGRAÇÃO AO ATENDIMENTO (Dia 1 tarde até Dia 2 manhã)',
+                color: 'color-purple',
+                expanded: true,
+                children: [
+                    {
+                        title: 'Treinamento Teórico',
+                        color: 'color-light-purple',
+                        expanded: true,
+                        children: [
+                            { title: 'IT "Atendimento Telefônico"', color: 'color-gray' },
+                            { title: 'Padrão de atendimento', color: 'color-gray' },
+                            { title: 'Processos WhatsApp e chamados', color: 'color-gray' },
+                            { title: 'Script de instruções essenciais', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Prática Assistida',
+                        color: 'color-light-purple',
+                        expanded: true,
+                        children: [
+                            { title: 'Acompanhar atendimentos do referência', color: 'color-gray' },
+                            { title: 'Observar scripts (início, pausas, finalização)', color: 'color-gray' },
+                            { title: 'Analisar postura (segurança, objetividade)', color: 'color-gray' },
+                            { title: 'Identificar tom acolhedor', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Primeiros Atendimentos',
+                        color: 'color-light-purple',
+                        expanded: true,
+                        children: [
+                            { title: 'Plataforma de chamados', color: 'color-gray' },
+                            { title: 'Solicitações via WhatsApp', color: 'color-gray' },
+                            { title: 'Consolidação de processos', color: 'color-gray' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'inicio',
+                title: '4. INÍCIO DOS ATENDIMENTOS (Dia 2 tarde em diante)',
+                color: 'color-orange',
+                expanded: true,
+                children: [
+                    {
+                        title: 'Atendimentos Telefônicos',
+                        color: 'color-orange',
+                        expanded: true,
+                        children: [
+                            { title: 'Referência acompanha 100% das ligações', color: 'color-gray' },
+                            { title: 'Identificar facilidades e dificuldades', color: 'color-gray' },
+                            { title: 'Auxiliar com processos', color: 'color-gray' },
+                            { title: 'Incentivar uso da base de conhecimento', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Autonomia Gradual',
+                        color: 'color-orange',
+                        expanded: true,
+                        children: [
+                            { title: 'Período individual por colaborador', color: 'color-gray' },
+                            { title: 'Avaliação de segurança nos processos', color: 'color-gray' },
+                            { title: 'Direcionamento de chamados pelo referência', color: 'color-gray' },
+                            { title: 'Suporte em processos complexos', color: 'color-gray' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'avaliacoes',
+                title: '5. AVALIAÇÕES',
+                color: 'color-red',
+                expanded: true,
+                children: [
+                    {
+                        title: 'Feedback Semanal',
+                        color: 'color-red',
+                        expanded: true,
+                        children: [
+                            { title: 'Todo final de semana (sábado/domingo)', color: 'color-gray' },
+                            { title: 'Apontar melhorias', color: 'color-gray' },
+                            { title: 'Sugestões de organização', color: 'color-gray' },
+                            { title: 'Parabenizar sucessos', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Sistema de Recompensas',
+                        color: 'color-red',
+                        expanded: true,
+                        children: [
+                            { title: '3 feedbacks positivos = brinde', color: 'color-gray' },
+                            { title: '3 feedbacks negativos = repescagem', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Ligações Surpresa',
+                        color: 'color-red',
+                        expanded: true,
+                        children: [
+                            { title: 'A partir da semana 2', color: 'color-gray' },
+                            { title: 'Referência/Analista/Coordenador simula solicitante', color: 'color-gray' },
+                            { title: 'Situação sob pressão', color: 'color-gray' },
+                            { title: 'Validar conhecimento e objetividade', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Formulários de Eficácia',
+                        color: 'color-red',
+                        expanded: true,
+                        children: [
+                            { title: 'Verificar leitura do conteúdo', color: 'color-gray' },
+                            { title: 'Comprovar compreensão', color: 'color-gray' },
+                            { title: 'Relatórios de conclusão', color: 'color-gray' }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'campanhas',
+                title: '6. CAMPANHAS DE DESENVOLVIMENTO',
+                color: 'color-yellow',
+                expanded: true,
+                children: [
+                    {
+                        title: 'Criação de Instruções de Trabalho',
+                        color: 'color-yellow',
+                        expanded: true,
+                        children: [
+                            { title: 'Incentivar todos os colaboradores', color: 'color-gray' },
+                            { title: 'Documentar processos frequentes', color: 'color-gray' },
+                            { title: 'Processos de alta complexidade', color: 'color-gray' }
+                        ]
+                    },
+                    {
+                        title: 'Torneio Inter Plantões',
+                        color: 'color-yellow',
+                        expanded: true,
+                        children: [
+                            { title: 'Quiz por plantão', color: 'color-gray' },
+                            { title: 'Questões sobre base de conhecimento', color: 'color-gray' },
+                            { title: 'Situações de atendimento', color: 'color-gray' },
+                            { title: 'Sistema de pontos por equipe', color: 'color-gray' },
+                            { title: 'Brindes para vencedores', color: 'color-gray' },
+                            { title: 'Promover trabalho em equipe', color: 'color-gray' }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        function createNode(data, level = 0) {
+            const node = document.createElement('div');
+            node.className = `node level-${level}`;
+            
+            const hasChildren = data.children && data.children.length > 0;
+            const nodeId = 'node-' + Math.random().toString(36).substr(2, 9);
+            
+            const content = document.createElement('div');
+            content.className = `node-content ${data.color}`;
+            
+            if (hasChildren) {
+                const toggleIcon = document.createElement('span');
+                toggleIcon.className = 'toggle-icon';
+                toggleIcon.textContent = data.expanded ? '−' : '+';
+                content.appendChild(toggleIcon);
+                
+                content.onclick = function() {
+                    const childrenDiv = node.querySelector('.children');
+                    if (childrenDiv) {
+                        childrenDiv.classList.toggle('expanded');
+                        toggleIcon.textContent = childrenDiv.classList.contains('expanded') ? '−' : '+';
+                    }
+                };
+            } else {
+                const bullet = document.createElement('span');
+                bullet.className = 'toggle-icon';
+                bullet.textContent = '•';
+                content.appendChild(bullet);
+            }
+            
+            const title = document.createElement('span');
+            title.className = 'node-title';
+            title.textContent = data.title;
+            content.appendChild(title);
+            
+            node.appendChild(content);
+            
+            if (hasChildren) {
+                const childrenDiv = document.createElement('div');
+                childrenDiv.className = `children ${data.expanded ? 'expanded' : ''}`;
+                
+                data.children.forEach(child => {
+                    childrenDiv.appendChild(createNode(child, level + 1));
+                });
+                
+                node.appendChild(childrenDiv);
+            }
+            
+            return node;
+        }
+
+        function renderMindMap() {
+            const container = document.getElementById('mindMap');
+            container.innerHTML = '';
+            
+            mindMapData.forEach(item => {
+                container.appendChild(createNode(item, 0));
+            });
+        }
+
+        function expandAll() {
+            document.querySelectorAll('.children').forEach(child => {
+                child.classList.add('expanded');
+            });
+            document.querySelectorAll('.toggle-icon').forEach(icon => {
+                if (icon.textContent === '+') {
+                    icon.textContent = '−';
+                }
+            });
+        }
+
+        function collapseAll() {
+            document.querySelectorAll('.children').forEach(child => {
+                child.classList.remove('expanded');
+            });
+            document.querySelectorAll('.toggle-icon').forEach(icon => {
+                if (icon.textContent === '−') {
+                    icon.textContent = '+';
+                }
+            });
+        }
+
+        renderMindMap();
+    </script>
 </body>
 </html>
