@@ -12,124 +12,255 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            padding: 40px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 24px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            padding: 50px;
+            position: relative;
+            backdrop-filter: blur(10px);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
         }
 
         .header h1 {
-            font-size: 2.5em;
-            color: #2c3e50;
-            margin-bottom: 10px;
+            font-size: 3em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -1px;
         }
 
         .header h2 {
-            font-size: 1.8em;
-            color: #7f8c8d;
-            margin-bottom: 20px;
+            font-size: 1.5em;
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
 
         .header p {
-            color: #95a5a6;
-            font-size: 1.1em;
+            color: #718096;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .header .subtitle {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-radius: 20px;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 0.95em;
         }
 
         .mind-map {
-            margin-top: 30px;
+            margin-top: 50px;
         }
 
         .node {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .node-content {
             display: flex;
             align-items: center;
-            padding: 15px 20px;
-            border-radius: 12px;
+            padding: 18px 24px;
+            border-radius: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             user-select: none;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .node-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .node-content:hover::before {
+            opacity: 1;
         }
 
         .node-content:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .node-content:active {
+            transform: translateX(8px) scale(0.98);
         }
 
         .toggle-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
+            width: 32px;
+            height: 32px;
+            margin-right: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             flex-shrink: 0;
+            background: rgba(255,255,255,0.5);
+            border-radius: 8px;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .node-content:hover .toggle-icon {
+            transform: rotate(90deg);
+            background: rgba(255,255,255,0.8);
         }
 
         .node-title {
             font-weight: 600;
             flex-grow: 1;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Níveis de profundidade */
         .level-0 .node-content {
-            font-size: 1.3em;
-            font-weight: bold;
+            font-size: 1.4em;
+            font-weight: 700;
+            padding: 22px 28px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .level-1 {
-            margin-left: 40px;
-            border-left: 3px solid #e0e0e0;
-            padding-left: 20px;
+            margin-left: 50px;
+            border-left: 3px solid #e2e8f0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .level-1::before {
+            content: '';
+            position: absolute;
+            left: -3px;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .level-1:hover::before {
+            opacity: 1;
         }
 
         .level-1 .node-content {
-            font-size: 1.1em;
+            font-size: 1.15em;
         }
 
         .level-2 {
-            margin-left: 40px;
+            margin-left: 50px;
             border-left: 2px solid #f0f0f0;
-            padding-left: 20px;
+            padding-left: 25px;
         }
 
         .level-2 .node-content {
-            font-size: 1em;
+            font-size: 0.95em;
+            padding: 14px 20px;
         }
 
-        /* Cores por categoria */
-        .color-blue { background-color: #e3f2fd; color: #1565c0; }
-        .color-green { background-color: #e8f5e9; color: #2e7d32; }
-        .color-purple { background-color: #f3e5f5; color: #6a1b9a; }
-        .color-orange { background-color: #fff3e0; color: #e65100; }
-        .color-red { background-color: #ffebee; color: #c62828; }
-        .color-yellow { background-color: #fff9c4; color: #f57f17; }
-        .color-light-blue { background-color: #e1f5fe; color: #01579b; }
-        .color-light-green { background-color: #f1f8e9; color: #558b2f; }
-        .color-light-purple { background-color: #ede7f6; color: #4527a0; }
-        .color-gray { background-color: #f5f5f5; color: #424242; }
+        /* Cores atualizadas com gradientes sutis */
+        .color-blue { 
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
+        }
+        .color-green { 
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #2e7d32;
+        }
+        .color-purple { 
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            color: #6a1b9a;
+        }
+        .color-orange { 
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            color: #e65100;
+        }
+        .color-red { 
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            color: #c62828;
+        }
+        .color-yellow { 
+            background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
+            color: #f57f17;
+        }
+        .color-light-blue { 
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+            color: #01579b;
+        }
+        .color-light-green { 
+            background: linear-gradient(135deg, #f1f8e9 0%, #dcedc8 100%);
+            color: #558b2f;
+        }
+        .color-light-purple { 
+            background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%);
+            color: #4527a0;
+        }
+        .color-gray { 
+            background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
+            color: #424242;
+        }
 
         .children {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .children.expanded {
@@ -137,60 +268,136 @@
         }
 
         .cronograma {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 3px solid #e0e0e0;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 3px solid #e2e8f0;
+            position: relative;
+        }
+
+        .cronograma::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 0;
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
         }
 
         .cronograma h3 {
-            font-size: 1.5em;
-            color: #2c3e50;
-            margin-bottom: 20px;
+            font-size: 1.8em;
+            color: #2d3748;
+            margin-bottom: 30px;
+            font-weight: 700;
         }
 
         .cronograma-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
         }
 
         .cronograma-item {
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cronograma-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cronograma-item:hover::before {
+            opacity: 1;
+        }
+
+        .cronograma-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+            border-color: rgba(255,255,255,0.5);
         }
 
         .cronograma-item h4 {
-            font-size: 1.1em;
-            margin-bottom: 8px;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
         }
 
         .cronograma-item p {
-            font-size: 0.95em;
+            font-size: 1em;
             opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
 
         .btn-container {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 50px;
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 12px 30px;
+            padding: 16px 36px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 1em;
             font-weight: 600;
-            transition: transform 0.2s;
-            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
         }
 
         @media print {
@@ -207,15 +414,45 @@
 
         @media (max-width: 768px) {
             .container {
-                padding: 20px;
+                padding: 30px 20px;
             }
             .header h1 {
-                font-size: 1.8em;
+                font-size: 2em;
             }
             .level-1, .level-2 {
-                margin-left: 20px;
+                margin-left: 25px;
+                padding-left: 15px;
+            }
+            .btn-container {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
             }
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .node {
+            animation: fadeIn 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        .node:nth-child(1) { animation-delay: 0.1s; }
+        .node:nth-child(2) { animation-delay: 0.2s; }
+        .node:nth-child(3) { animation-delay: 0.3s; }
+        .node:nth-child(4) { animation-delay: 0.4s; }
+        .node:nth-child(5) { animation-delay: 0.5s; }
+        .node:nth-child(6) { animation-delay: 0.6s; }
     </style>
 </head>
 <body>
@@ -223,8 +460,8 @@
         <div class="header">
             <h1>🧠 Mapa Mental</h1>
             <h2>Integração de Novos Colaboradores</h2>
-            <p>Help Desk I - Suporte Técnico</p>
-            <p style="margin-top: 10px; font-size: 0.9em;">📌 Clique nos itens para expandir/recolher</p>
+            <span class="subtitle">Help Desk I - Suporte Técnico</span>
+            <p style="margin-top: 20px; font-size: 0.95em; color: #718096;">📌 Clique nos itens para expandir/recolher</p>
         </div>
 
         <div class="mind-map" id="mindMap"></div>
@@ -237,11 +474,11 @@
                     <p>Orientação inicial</p>
                 </div>
                 <div class="cronograma-item color-green">
-                    <h4>Dia 1 </h4>
+                    <h4>Dia 1</h4>
                     <p>Integração ao atendimento</p>
                 </div>
                 <div class="cronograma-item color-orange">
-                    <h4>Dia 2 </h4>
+                    <h4>Dia 2</h4>
                     <p>Início dos atendimentos</p>
                 </div>
                 <div class="cronograma-item color-red">
@@ -252,9 +489,9 @@
         </div>
 
         <div class="btn-container">
-            <button class="btn" onclick="expandAll()">➕ Expandir Todos</button>
-            <button class="btn" onclick="collapseAll()">➖ Recolher Todos</button>
-            <button class="btn" onclick="window.print()">🖨️ Imprimir</button>
+            <button class="btn" onclick="expandAll()"><span>➕ Expandir Todos</span></button>
+            <button class="btn" onclick="collapseAll()"><span>➖ Recolher Todos</span></button>
+            <button class="btn" onclick="window.print()"><span>🖨️ Imprimir</span></button>
         </div>
     </div>
 
@@ -262,14 +499,14 @@
         const mindMapData = [
             {
                 id: 'orientacao',
-                title: '1. ORIENTAÇÃO INICIAL ',
+                title: '1. ORIENTAÇÃO INICIAL',
                 color: 'color-blue',
-                expanded: true,
+                expanded: false,
                 children: [
                     {
                         title: 'Tour pelas Instalações',
                         color: 'color-light-blue',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Banheiro, bebedouro, refeitório', color: 'color-gray' },
                             { title: 'Áreas de descanso', color: 'color-gray' },
@@ -279,7 +516,7 @@
                     {
                         title: 'Procedimentos Administrativos',
                         color: 'color-light-blue',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Registro de ponto', color: 'color-gray' },
                             { title: 'Ajustes no Sênior', color: 'color-gray' },
@@ -290,7 +527,7 @@
                     {
                         title: 'Apresentação da Equipe',
                         color: 'color-light-blue',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Tour pelo Prédio ADM e HMS', color: 'color-gray' },
                             { title: 'Setores principais de TI', color: 'color-gray' },
@@ -300,7 +537,7 @@
                     {
                         title: 'Cultura Organizacional',
                         color: 'color-light-blue',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Normas internas (uniforme, crachá)', color: 'color-gray' },
                             { title: 'Comunicação formal/informal', color: 'color-gray' },
@@ -313,12 +550,12 @@
                 id: 'integracao',
                 title: '2. INTEGRAÇÃO AO SETOR',
                 color: 'color-green',
-                expanded: true,
+                expanded: false,
                 children: [
                     {
                         title: 'Estação de Trabalho',
                         color: 'color-light-green',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Entrega do headset', color: 'color-gray' },
                             { title: 'Definição do local de trabalho', color: 'color-gray' },
@@ -328,7 +565,7 @@
                     {
                         title: 'Configuração de Sistemas',
                         color: 'color-light-green',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Usuário de máquina', color: 'color-gray' },
                             { title: 'Configuração de ramal', color: 'color-gray' },
@@ -339,7 +576,7 @@
                     {
                         title: 'Base de Conhecimento',
                         color: 'color-light-green',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Apresentação da estrutura', color: 'color-gray' },
                             { title: 'Manuais de processos', color: 'color-gray' },
@@ -350,14 +587,14 @@
             },
             {
                 id: 'atendimento',
-                title: '3. INTEGRAÇÃO AO ATENDIMENTO ',
+                title: '3. INTEGRAÇÃO AO ATENDIMENTO',
                 color: 'color-purple',
-                expanded: true,
+                expanded: false,
                 children: [
                     {
                         title: 'Treinamento Teórico',
                         color: 'color-light-purple',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'IT "Atendimento Telefônico"', color: 'color-gray' },
                             { title: 'Padrão de atendimento', color: 'color-gray' },
@@ -368,7 +605,7 @@
                     {
                         title: 'Prática Assistida',
                         color: 'color-light-purple',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Acompanhar atendimentos do referência', color: 'color-gray' },
                             { title: 'Observar scripts (início, pausas, finalização)', color: 'color-gray' },
@@ -379,7 +616,7 @@
                     {
                         title: 'Primeiros Atendimentos',
                         color: 'color-light-purple',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Plataforma de chamados', color: 'color-gray' },
                             { title: 'Solicitações via WhatsApp', color: 'color-gray' },
@@ -392,12 +629,12 @@
                 id: 'inicio',
                 title: '4. INÍCIO DOS ATENDIMENTOS (Dia 2 tarde em diante)',
                 color: 'color-orange',
-                expanded: true,
+                expanded: false,
                 children: [
                     {
                         title: 'Atendimentos Telefônicos',
                         color: 'color-orange',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Referência acompanha 100% das ligações', color: 'color-gray' },
                             { title: 'Identificar facilidades e dificuldades', color: 'color-gray' },
@@ -408,7 +645,7 @@
                     {
                         title: 'Autonomia Gradual',
                         color: 'color-orange',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Período individual por colaborador', color: 'color-gray' },
                             { title: 'Avaliação de segurança nos processos', color: 'color-gray' },
@@ -422,12 +659,12 @@
                 id: 'avaliacoes',
                 title: '5. AVALIAÇÕES',
                 color: 'color-red',
-                expanded: true,
+                expanded: false,
                 children: [
                     {
                         title: 'Feedback Semanal',
                         color: 'color-red',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Todo final de semana (sábado/domingo)', color: 'color-gray' },
                             { title: 'Apontar melhorias', color: 'color-gray' },
@@ -438,7 +675,7 @@
                     {
                         title: 'Sistema de Recompensas',
                         color: 'color-red',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: '3 feedbacks positivos = brinde', color: 'color-gray' },
                             { title: '3 feedbacks negativos = repescagem', color: 'color-gray' }
@@ -447,7 +684,7 @@
                     {
                         title: 'Ligações Surpresa',
                         color: 'color-red',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'A partir da semana 2', color: 'color-gray' },
                             { title: 'Referência/Analista/Coordenador simula solicitante', color: 'color-gray' },
@@ -458,7 +695,7 @@
                     {
                         title: 'Formulários de Eficácia',
                         color: 'color-red',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Verificar leitura do conteúdo', color: 'color-gray' },
                             { title: 'Comprovar compreensão', color: 'color-gray' },
@@ -471,12 +708,12 @@
                 id: 'campanhas',
                 title: '6. CAMPANHAS DE DESENVOLVIMENTO',
                 color: 'color-yellow',
-                expanded: true,
+                expanded: false,
                 children: [
                     {
                         title: 'Criação de Instruções de Trabalho',
                         color: 'color-yellow',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Incentivar todos os colaboradores', color: 'color-gray' },
                             { title: 'Documentar processos frequentes', color: 'color-gray' },
@@ -486,7 +723,7 @@
                     {
                         title: 'Torneio Inter Plantões',
                         color: 'color-yellow',
-                        expanded: true,
+                        expanded: false,
                         children: [
                             { title: 'Quiz por plantão', color: 'color-gray' },
                             { title: 'Questões sobre base de conhecimento', color: 'color-gray' },
@@ -505,7 +742,6 @@
             node.className = `node level-${level}`;
             
             const hasChildren = data.children && data.children.length > 0;
-            const nodeId = 'node-' + Math.random().toString(36).substr(2, 9);
             
             const content = document.createElement('div');
             content.className = `node-content ${data.color}`;
